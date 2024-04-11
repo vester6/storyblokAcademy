@@ -1,14 +1,7 @@
-<template>
-  <div>
-    <h1>Welcome to My Nuxt 3 App</h1>
-    <NuxtLink to="/about">About Us</NuxtLink>
-  </div>
-</template>
-
 <script setup>
-// Script setup area
+const story = await useAsyncStoryblok("home", { version: "draft" });
 </script>
 
-<style scoped>
-/* Page-specific styles */
-</style>
+<template>
+  <StoryblokComponent v-if="story" :blok="story.content" />
+</template>
