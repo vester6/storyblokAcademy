@@ -11,3 +11,9 @@
 <script setup>
 defineProps({ blok: Object });
 </script>
+
+<style scoped>
+.flex-container {
+  display: flex;
+}
+</style>
