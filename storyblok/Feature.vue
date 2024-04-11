@@ -4,6 +4,9 @@
       <h3>
         {{ blok.name }}
       </h3>
+      <p>
+        {{ blok.bodytext }}
+      </p>
     </div>
   </div>
 </template>

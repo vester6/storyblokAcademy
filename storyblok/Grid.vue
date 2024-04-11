@@ -1,5 +1,9 @@
 <template>
   <div v-editable="blok" class="wrapper">
+    <div class="topsection">
+      <h3>{{ blok.headline }}</h3>
+      <p>{{ blok.bodytext }}</p>
+    </div>
     <div class="teaser-list">
       <StoryblokComponent
         v-for="blok in blok.columns"
@@ -15,6 +19,15 @@ defineProps({ blok: Object });
 </script>
 
 <style scoped>
+.topsection {
+  display: grid;
+  margin: 0 auto;
+  padding-left: 30px;
+  max-width: 984px;
+
+  padding-top: 30px;
+}
+
 .teaser-list {
   display: grid;
   grid-gap: 20px;
