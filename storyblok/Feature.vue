@@ -1,6 +1,11 @@
 <template>
   <div v-editable="blok" class="card-teaser">
     <div class="teaser-content">
+      <img
+        :src="blok.image.filename"
+        :alt="blok.image.alt"
+        class="teaser-image"
+      />
       <h3>
         {{ blok.name }}
       </h3>
@@ -12,8 +17,10 @@
 </template>
 
 <script setup>
+import { defineProps } from "vue";
 defineProps({ blok: Object });
 </script>
+
 <style scoped>
 .card-teaser {
   width: 100%; /* To fill out the content area */
