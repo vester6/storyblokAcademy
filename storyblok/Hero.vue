@@ -33,7 +33,6 @@ const heroClasses = computed(() => {
   align-items: flex-end;
   justify-content: center;
   margin: 1.5rem auto;
-  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -51,7 +50,6 @@ const heroClasses = computed(() => {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-
   overflow: hidden;
 }
 
@@ -73,9 +71,7 @@ const heroClasses = computed(() => {
 }
 
 .hero-content h2 {
-  font-size: 2.25rem;
   color: white;
-  font-weight: lighter;
 }
 
 .hero-background {
