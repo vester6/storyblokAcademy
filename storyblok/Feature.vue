@@ -32,6 +32,8 @@ defineProps({ blok: Object });
 
 .teaser-image {
   width: 100%;
+  min-height: 235px;
+  object-fit: cover;
   max-width: 500px; /* Adjust max-width as needed */
   margin-bottom: 20px; /* Adjust the bottom margin to control space between image and headline */
 }

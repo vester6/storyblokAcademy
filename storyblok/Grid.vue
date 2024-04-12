@@ -24,7 +24,6 @@ defineProps({ blok: Object });
   margin: 0 auto;
   padding-left: 30px;
   max-width: 984px;
-
   padding-top: 30px;
 }
 

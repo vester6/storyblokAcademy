@@ -1,3 +1,11 @@
+h1 {
+  font-size: 60px;
+  line-height: 66px;
+  font-family: "oscine";
+  color: #0c0931;
+  font-weight: 300;
+}
+
 h2 {
   font-size: 30px;
   line-height: 36px;
