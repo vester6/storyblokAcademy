@@ -13,14 +13,18 @@
         :src="accordion.image.filename"
         :alt="accordion.image.alt"
       />
-      <p>{{ accordion.bodytext }}</p>
+
+      <div v-html="bodytextnewcontent"></div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-defineProps({ accordion: Object });
+const props = defineProps({ accordion: Object });
+const bodytextnewcontent = computed(() =>
+  renderRichText(props.accordion.bodytextnew)
+);
 
 const isExpanded = ref(false);
 
@@ -32,7 +36,7 @@ const toggleAccordion = () => {
 <style scoped>
 .accordion {
   border-bottom: 1px solid #e1e1e1;
-  transition: background-color 0.3s ease;
+  transition: background-color 1s ease;
 }
 
 .accordion:last-child {
@@ -45,7 +49,7 @@ const toggleAccordion = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 1s ease;
 }
 
 .accordion-header:hover {
@@ -60,7 +64,7 @@ const toggleAccordion = () => {
 .accordion-content {
   padding: 20px;
   background-color: white;
-  transition: all 0.3s ease-in-out;
+  transition: all 1s ease-in-out;
 }
 
 .accordion-content img {

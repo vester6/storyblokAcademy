@@ -9,12 +9,10 @@
               :alt="blok.image.alt"
               class="teaser-image"
             />
-            <h3>
+            <div class="teaser-text">
               {{ blok.name }}
-            </h3>
-            <p>
               {{ blok.bodytext }}
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -24,12 +22,10 @@
           :alt="blok.imagebackside.alt"
           class="teaser-image"
         />
-        <h3>
+        <div class="teaser-text">
           {{ blok.namebackside }}
-        </h3>
-        <p>
           {{ blok.bodytextbackside }}
-        </p>
+        </div>
         <!-- Add your content for the back of the card here -->
       </div>
     </div>
@@ -108,5 +104,17 @@ function toggleFlip() {
 
 .teaser-content p {
   margin-top: 0;
+}
+.teaser-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 30px;
+  line-height: 36px;
+  font-family: "oscine";
+  color: #fff;
+  font-weight: 300;
 }
 </style>
