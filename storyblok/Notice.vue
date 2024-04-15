@@ -13,6 +13,13 @@ defineProps({ blok: Object });
 </script>
 
 <style scoped>
+p {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+}
 .container {
   background-color: #effafe;
   color: #0c0931;

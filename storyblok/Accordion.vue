@@ -78,4 +78,12 @@ const toggleAccordion = () => {
   font-size: 16px;
   line-height: 1.5;
 }
+
+p {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+}
 </style>
