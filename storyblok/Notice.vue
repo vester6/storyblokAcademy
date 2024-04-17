@@ -25,12 +25,12 @@ p {
   color: #0c0931;
   display: flex;
   flex-direction: column;
-  align-items: left; /* Ensure the container is centered */
+  align-items: left;
   font-size: 16px;
   font-weight: 300;
   line-height: 24px;
   max-width: 646px;
-  margin: auto; /* Centering in the viewport */
+  margin: auto;
   padding: 30px;
   /* Take full viewport height */
 }
