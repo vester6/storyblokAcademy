@@ -7,27 +7,29 @@
       </h3>
       <div class="card-container">
         <div
-          class="card"
-          :style="cardStyle"
-          @mousedown="startDrag"
-          @mousemove="onDrag"
-          @mouseup="endDrag"
-          @mouseleave="endDrag"
-        >
-          <p class="card-title">Draggable card</p>
-          <svg
-            class="card-icon"
-            width="31"
-            height="11"
-            viewBox="0 0 31 11"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0.5 0.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-            <path d="M0.5 5.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-            <path d="M0.5 10.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-          </svg>
-        </div>
+  v-if="!cardPosition.animation"
+  class="card"
+  :style="cardStyle"
+  @mousedown="startDrag"
+  @mousemove="onDrag"
+  @mouseup="endDrag"
+  @mouseleave="endDrag"
+>
+  <p class="card-title">Draggable card</p>
+  <svg
+    class="card-icon"
+    width="31"
+    height="11"
+    viewBox="0 0 31 11"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0.5 0.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+    <path d="M0.5 5.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+    <path d="M0.5 10.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+  </svg>
+</div>
+
         <div class="dropzone-container">
           <div class="dropzone" ref="dropzone1">
             <p class="dropzone-title">dropzone 1</p>
@@ -47,6 +49,7 @@ import { ref, computed } from "vue";
 const isDragging = ref(false);
 const cardPosition = ref({ x: 0, y: -200 }); // Start position changed
 const startPosition = ref({ x: 0, y: 0 });
+const cardRotation = ref(0); // Initialize card rotation
 const dropzone1 = ref(null);
 const dropzone2 = ref(null);
 
@@ -56,6 +59,10 @@ const startDrag = (event) => {
     x: event.clientX - cardPosition.value.x,
     y: event.clientY - cardPosition.value.y,
   };
+  if (!isOverDropZone()) {
+    // Add rotation when dragging starts if not over dropzone
+    cardRotation.value = 3;
+  }
   event.preventDefault();
 };
 
@@ -70,41 +77,72 @@ const onDrag = (event) => {
 
 const endDrag = () => {
   isDragging.value = false;
-  if (!isOverDropZone()) {
+  if (isOverDropZone(dropzone1.value)) {
+    applyRightAnswerAnimation();
+  } else if (isOverDropZone(dropzone2.value)) {
+    applyWrongAnswerAnimation();
+    cardPosition.value = { ...cardPosition.value, animation: true }; // Set animation for fade-out-and-disappear
+  } else {
     cardPosition.value = { x: 0, y: -200 }; // Reset to start position
+    cardRotation.value = 0; // Reset rotation
   }
 };
 
-const isOverDropZone = () => {
+function isOverDropZone(dropzone) {
+  if (!dropzone) return false;
   const cardRect = document.querySelector(".card").getBoundingClientRect();
-  const dropzone1Rect = dropzone1.value.getBoundingClientRect();
-  const dropzone2Rect = dropzone2.value.getBoundingClientRect();
+  const dzRect = dropzone.getBoundingClientRect();
 
-  const isOverDZ1 =
-    cardRect.left < dropzone1Rect.right &&
-    cardRect.right > dropzone1Rect.left &&
-    cardRect.top < dropzone1Rect.bottom &&
-    cardRect.bottom > dropzone1Rect.top;
+  return (
+    cardRect.left < dzRect.right &&
+    cardRect.right > dzRect.left &&
+    cardRect.top < dzRect.bottom &&
+    cardRect.bottom > dzRect.top
+  );
+}
 
-  const isOverDZ2 =
-    cardRect.left < dropzone2Rect.right &&
-    cardRect.right > dropzone2Rect.left &&
-    cardRect.top < dropzone2Rect.bottom &&
-    cardRect.bottom > dropzone2Rect.top;
-
-  return isOverDZ1 || isOverDZ2;
-};
+function applyRightAnswerAnimation() {
+  const dropzoneRect = dropzone1.value.getBoundingClientRect();
+  const cardRect = document.querySelector(".card").getBoundingClientRect();
+  const offsetX = dropzoneRect.left - cardRect.left;
+  const offsetY = dropzoneRect.top - cardRect.top;
+  cardPosition.value = { x: offsetX, y: offsetY };
+  setTimeout(() => {
+    cardPosition.value = { ...cardPosition.value, animation: true };
+    setTimeout(() => {
+      cardPosition.value = { x: offsetX, y: offsetY + 1000 }; // Move the card below the dropzone
+      setTimeout(() => {
+        // Remove card from DOM
+        cardPosition.value = { x: 0, y: -200, animation: false }; // Reset position and animation state
+      }, 600); // Animation duration
+    }, 600); // Delay before moving below dropzone
+  }, 100); // Delay before starting animation
+}
 
 const cardStyle = computed(() => ({
-  transform: `translate(${cardPosition.value.x}px, ${cardPosition.value.y}px) 
-                rotate(${isDragging.value ? 3 : 0}deg) 
-                scale(${isDragging.value ? 1.01 : 1})`, // Scale the card when dragging
+  transform: `translate(${cardPosition.value.x}px, ${cardPosition.value.y}px) rotate(${cardRotation.value}deg) scale(${isDragging.value ? 1.01 : 1})`,
   transition: isDragging.value ? "none" : "transform 0.6s ease",
   cursor: isDragging.value ? "grabbing" : "grab",
+  animation: isOverDropZone(dropzone2.value) ? 'fade-out-and-disappear 0.6s forwards' : (cardPosition.value.animation ? 'scale-down-and-disappear 0.6s forwards' : 'none')
 }));
+
 </script>
 
+
 <style scoped>
+@keyframes fade-out-and-disappear {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
 p {
   font-size: 16px;
   line-height: 24px;
