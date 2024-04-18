@@ -59,6 +59,7 @@ p {
 }
 
 .wrapper {
+ height: 400px;
   background-color: #f9fdff;
 }
 </style>

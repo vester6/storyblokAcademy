@@ -1,6 +1,6 @@
 <template>
-    <section class="content-section">
-      <article class="content-article":class="gradients" >
+   
+      <div class="content-wrapper":class="gradients" >
         <div class="textcontainer":class="layouts">
           <div class="bodytext"  v-html="bodytext"></div>
         </div>
@@ -10,8 +10,8 @@
           :src="blok.image.filename"
           :alt="blok.image.alt"
         />
-      </article>
-    </section>
+    </div>
+   
   </template>
   
   <script setup>
@@ -23,14 +23,14 @@
     return props.blok.layout === "constrained" ? "textcontainer" : "textcontainer2";
   });
   const gradients = computed(() => {
-    return props.blok.layout === "constrained" ? "content-article" : "content-article2";
+    return props.blok.layout === "constrained" ? "content-wrapper" : "content-wrapper2";
   });
   </script>
   
   <style scoped>
+
   .textcontainer {
     display: flex;
-   
     justify-content: left;
     margin: auto;
     width: 984px;
@@ -48,12 +48,14 @@
   }
 
   
-  .content-article {
+  .content-wrapper {
   display: flex; 
   position: relative;
   overflow: hidden;
   min-height: 450px;
   width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
   font-family: Oscine, sans-serif;
   font-size: 22px;
   color: #0c0931;
@@ -62,7 +64,7 @@
   background: rgb(245,251,255);
 background: linear-gradient(90deg, rgba(245,251,255,0.95) 20%, rgba(245,251,255,0.8) 63%, rgba(245,251,255,0) 100%);
 }
-.content-article2 {
+.content-wrapper2 {
   display: flex; 
   position: relative;
   overflow: hidden;
@@ -78,7 +80,7 @@ background: linear-gradient(270deg, rgba(245,251,255,0.95) 20%, rgba(245,251,255
 }
   
   @media (max-width: 991px) {
-    .content-article {
+    .content-wrapper {
       padding: 0 60px; /* Adjusted padding */
     }
   }
