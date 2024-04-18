@@ -22,6 +22,14 @@ defineProps({ blok: Object });
 </script>
 
 <style scoped>
+p {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+}
+
 .card-teaser {
   width: 100%; /* To fill out the content area */
   display: flex;
