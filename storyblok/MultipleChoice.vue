@@ -2,9 +2,7 @@
   <div class="quiz-container">
     <form @submit.prevent="submitQuiz">
       <div class="quiz-header">
-        <h3>
-          {{ blok.headline }}
-        </h3>
+        <h3>{{ blok.headline }}</h3>
         <img
           :src="blok.image.filename"
           :alt="blok.image.alt"
@@ -12,20 +10,21 @@
         />
       </div>
       <p>{{ blok.bodytext }}</p>
-      <div class="option" v-for="(option, index) in blok.options" :key="index">
-        <input
-          type="radio"
-          :id="'option' + index"
-          name="quiz_option"
-          :value="index"
-          v-model="selectedOption"
-          :disabled="submitted"
-        />
+      <div v-for="(option, index) in blok.options" :key="index" class="option">
         <label
           :class="{ selected: selectedOption === index.toString() }"
-          :for="'option' + index"
-          >{{ option.text }}</label
+          class="option-label"
         >
+          <input
+            type="radio"
+            :id="'option' + index"
+            name="quiz_option"
+            :value="index"
+            v-model="selectedOption"
+            :disabled="submitted"
+          />
+          {{ option.text }}
+        </label>
       </div>
       <div class="submit-container" v-if="!submitted">
         <input type="submit" value="Submit" class="submit-button" />
@@ -38,22 +37,31 @@
             : 'incorrect-answer'
         "
       >
+        <img
+          :src="
+            blok.options[selectedOption].isCorrect
+              ? '/icon-correct.svg'
+              : '/icon-wrong.svg'
+          "
+          class="icon"
+          alt="Feedback Icon"
+        />
         <div class="header">
-          <div class="text">
+          <h3 class="text">
             {{
               blok.options[selectedOption].isCorrect
-                ? blok.headlinewrong
-                : blok.headlinecorrect
+                ? blok.headlinecorrect
+                : blok.headlinewrong
             }}
-          </div>
+          </h3>
         </div>
-        <div class="message">
+        <p class="message">
           {{
             blok.options[selectedOption].isCorrect
               ? blok.textcorrect
               : blok.textwrong
           }}
-        </div>
+        </p>
         <div class="submit-container">
           <input type="submit" value="Try Again" class="submit-button" />
         </div>
@@ -83,6 +91,14 @@ const submitQuiz = () => {
 </script>
 
 <style scoped>
+p {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+}
+
 h3 {
   padding-bottom: 15px;
 }
@@ -103,15 +119,21 @@ label {
 
 .option {
   width: 100%;
-  height: 30px;
-  padding: 15px;
   margin-bottom: 15px;
-  margin-top: 15px; /* Make the element take up the whole width of its container */
 }
 
-.option:hover {
-  background-color: #effafe; /* Change the background color when hovering over the element */
+.option-label {
+  display: block;
+  padding: 15px;
+  cursor: pointer;
 }
+
+.option-label:hover {
+  background-color: #effafe; /* Change the background color when hovering over the option */
+}
+
+/*  .option-label input[type="radio"] {position: absolute;
+  opacity: 0; }If you want the radio button to be hidden but still clickable */
 
 .quiz-container {
   display: flex;
@@ -182,10 +204,10 @@ input[type="submit"] {
   align-items: center;
   width: 100%;
   max-width: 475px;
-  padding: 2px 60px;
   font-size: 30px;
-  color: #0c0931;
-  line-height: 120%;
+  line-height: 36px;
+  font-family: "Oscine";
+  font-weight: 300;
 }
 
 @media (max-width: 991px) {
@@ -224,6 +246,7 @@ input[type="submit"] {
   margin-top: 30px;
   color: #0c0931;
   font: 16px/24px Open Sans, sans-serif;
+  font-weight: 300;
   font-feature-settings: "clig" off, "liga" off;
 }
 
