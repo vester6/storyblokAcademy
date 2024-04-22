@@ -1,6 +1,6 @@
 <template>
   <div class="quiz-container">
-    <form @submit.prevent="submitQuiz">
+    <form>
       <div class="quiz-header">
         <h3>{{ blok.headline }}</h3>
         <img
@@ -14,6 +14,7 @@
         <label
           :class="{ selected: selectedOption === index.toString() }"
           class="option-label"
+          @click="selectOption(index)"
         >
           <input
             type="radio"
@@ -26,71 +27,91 @@
           {{ option.text }}
         </label>
       </div>
-      <div class="submit-container" v-if="!submitted">
-        <input type="submit" value="Submit" class="submit-button" />
-      </div>
-      <div
-        v-if="submitted"
-        :class="
-          blok.options[selectedOption].isCorrect
-            ? 'correct-answer'
-            : 'incorrect-answer'
-        "
-      >
-        <img
-          :src="
+      <transition name="fade">
+        <div
+          v-if="submitted"
+          :class="
             blok.options[selectedOption].isCorrect
-              ? '/icon-correct.svg'
-              : '/icon-wrong.svg'
+              ? 'correct-answer'
+              : 'incorrect-answer'
           "
-          class="icon"
-          alt="Feedback Icon"
-        />
-        <div class="header">
-          <h3 class="text">
+        >
+          <img
+            :src="
+              blok.options[selectedOption].isCorrect
+                ? '/icon-correct.svg'
+                : '/icon-wrong.svg'
+            "
+            class="icon"
+            alt="Feedback Icon"
+          />
+
+          <div class="header">
+            <h3 class="text">
+              {{
+                blok.options[selectedOption].isCorrect
+                  ? blok.headlinecorrect
+                  : blok.headlinewrong
+              }}
+            </h3>
+          </div>
+          <p class="message">
             {{
               blok.options[selectedOption].isCorrect
-                ? blok.headlinecorrect
-                : blok.headlinewrong
+                ? blok.textcorrect
+                : blok.textwrong
             }}
-          </h3>
+          </p>
+
+          <div class="submit-container">
+            <input
+              type="button"
+              value="Try Again"
+              class="submit-button"
+              @click="resetQuiz"
+            />
+          </div>
         </div>
-        <p class="message">
-          {{
-            blok.options[selectedOption].isCorrect
-              ? blok.textcorrect
-              : blok.textwrong
-          }}
-        </p>
-        <div class="submit-container">
-          <input type="submit" value="Try Again" class="submit-button" />
-        </div>
-      </div>
+      </transition>
     </form>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, ref, watch } from "vue";
 defineProps({ blok: Object });
 let selectedOption = ref(null);
 let submitted = ref(false);
 
-const submitQuiz = () => {
-  if (submitted.value) {
-    // Reset the quiz
-    selectedOption.value = null;
-    submitted.value = false;
-  } else {
-    // Submit the quiz
-    submitted.value = true;
-    console.log(`Selected option value: ${selectedOption.value}`);
-    // Add more logic as required
+const selectOption = (index) => {
+  if (!submitted.value) {
+    selectedOption.value = index;
   }
+};
+
+watch(selectedOption, () => {
+  if (selectedOption.value !== null) {
+    setTimeout(() => {
+      submitted.value = true;
+    }, 100);
+  }
+});
+
+const resetQuiz = () => {
+  selectedOption.value = null;
+  submitted.value = false;
 };
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 p {
   font-size: 16px;
   line-height: 24px;
@@ -115,6 +136,15 @@ label {
   font-weight: 300;
   margin-bottom: 15px;
   margin-top: 15px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #2084c9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .option {
@@ -190,32 +220,17 @@ input[type="submit"] {
   text-align: center;
 }
 
-@media (max-width: 991px) {
-  .correct-answer,
-  .incorrect-answer {
-    padding: 0 20px;
-  }
-}
-
 .correct-answer .header,
 .incorrect-answer .header {
   display: flex;
   justify-content: center;
-  align-items: center;
+
   width: 100%;
   max-width: 475px;
   font-size: 30px;
   line-height: 36px;
   font-family: "Oscine";
   font-weight: 300;
-}
-
-@media (max-width: 991px) {
-  .correct-answer .header,
-  .incorrect-answer .header {
-    padding: 0 20px;
-    white-space: initial;
-  }
 }
 
 .correct-answer .icon,
@@ -243,8 +258,8 @@ input[type="submit"] {
 
 .correct-answer .message,
 .incorrect-answer .message {
-  margin-top: 30px;
   color: #0c0931;
+  margin-top: 0px;
   font: 16px/24px Open Sans, sans-serif;
   font-weight: 300;
   font-feature-settings: "clig" off, "liga" off;
