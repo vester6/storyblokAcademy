@@ -12,8 +12,10 @@
       <p>{{ blok.bodytext }}</p>
       <div v-for="(option, index) in blok.options" :key="index" class="option">
         <label
-          :class="{ selected: selectedOption === index.toString() }"
-          class="option-label"
+          :class="{
+            selected: selectedOption === index.toString(),
+            'option-label': true,
+          }"
           @click="selectOption(index)"
         >
           <input
@@ -159,7 +161,16 @@ label {
 }
 
 .option-label:hover {
-  background-color: #effafe; /* Change the background color when hovering over the option */
+  background-color: #effafe;
+}
+
+.selected {
+  border: 3px solid #2084c9;
+}
+
+.option-label.selected {
+  border: 3px solid #2084c9; /* Change the color as per your requirement */
+  box-sizing: border-box;
 }
 
 /*  .option-label input[type="radio"] {position: absolute;
