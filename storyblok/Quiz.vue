@@ -1,16 +1,23 @@
 <template>
-    <div v-if="currentQuestion">
-      <h1>{{ currentQuestion.question_text }}</h1>
-      <ul>
-        <li v-for="answer in currentQuestion.answers" :key="answer._uid">
-          <button @click="selectAnswer(answer)">{{ answer.answer_text }}</button>
-        </li>
-      </ul>
+    <div class="quiz-container">
+        <div class="quiz-content">
+      <div v-if="currentQuestion">
+       <div class="imagecontainer">
+        <img class="question-image" v-if="currentQuestion.question_image" :src="currentQuestion.question_image.filename" alt="Question Image"></div>
+        <h3>{{ currentQuestion.question_text }}</h3>
+        <ul>
+          <li v-for="answer in currentQuestion.answers" :key="answer._uid">
+            <button class="button" @click="selectAnswer(answer)">{{ answer.answer_text }}</button>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <p>Loading quiz or no quiz data available...</p>
+      </div>
     </div>
-    <div v-else>
-      <p>Loading quiz or no quiz data available...</p>
     </div>
   </template>
+  
   
   <script setup>
 import { ref, onMounted } from 'vue';
@@ -58,3 +65,73 @@ const selectAnswer = (answer) => {
 
 onMounted(fetchQuizData);
 </script>
+
+<style scoped>
+.button {
+  padding: 10px 20px;
+  background-color: #fff;
+  color: #0c0931;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  outline: none; 
+}
+
+ ul {
+        list-style-type: none;
+    }
+
+
+.button:hover {
+  background-color: #effafe;; /* Lighter grey on hover */
+}
+.button:focus {
+  outline: 2px solid #009688; /* Replace with your preferred color */
+}
+
+
+
+
+p {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+}
+
+h3 {
+    padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+
+
+.quiz-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fdff;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  width: 100%;
+}
+
+.quiz-content {
+    background-color: #fff;
+  padding: 20px;
+  width: 100%;
+  max-width: 646px;
+}
+
+.question-image {
+  max-width: 100%;
+  height: 150px;
+}
+
+.imagecontainer {
+    min-height: 150px;
+}
+
+</style>
