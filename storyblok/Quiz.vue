@@ -15,6 +15,7 @@
         </div>
         <div v-else-if="finalText">
           <p>{{ finalText }}</p>
+          <img v-if="finalImage" :src="finalImage" alt="Ending Image" class="final-image"/>
           <button class="button" @click="restartQuiz">Restart Quiz</button>
         </div>
         <div v-else>
@@ -30,7 +31,8 @@
   import axios from 'axios';
   
   const currentQuestion = ref(null);
-  const finalText = ref(null); // Holds the text for the `answerEnd` block
+  const finalText = ref(null); // Holds the text for the `finalText` field
+  const finalImage = ref(null); // Holds the URL for the `finalImage`
   
   const fetchQuizData = async () => {
     try {
@@ -40,18 +42,13 @@
           token: 'rNPzA9OYKH7bTADlOhVuWQtt' // Replace with your actual public token
         }
       });
-      console.log("API Response Data:", response.data); // Log the whole response data
   
       const pageData = response.data.story.content;
-      console.log("Page Data:", pageData); // Log the page data to inspect the structure
-  
       const quizComponent = pageData.body.find(component => component.component === 'quiz');
-      console.log("Quiz Component:", quizComponent);
   
       if (quizComponent && quizComponent.start_question && Array.isArray(quizComponent.start_question) && quizComponent.start_question.length > 0) {
         currentQuestion.value = quizComponent.start_question[0];
       } else {
-        console.error("Quiz component or start_question is not available or not in expected format", quizComponent);
         currentQuestion.value = null; // Or set some default state
       }
     } catch (error) {
@@ -60,15 +57,17 @@
   };
   
   const selectAnswer = (answer) => {
-    if (answer.final_text) {
-      finalText.value = answer.final_text;
-      currentQuestion.value = null;
-    } else if (answer.next_question && answer.next_question.length > 0) {
+    if (answer.next_question && answer.next_question.length > 0) {
       currentQuestion.value = answer.next_question[0];
       finalText.value = null;
+      finalImage.value = null; // Clear the image when moving to the next question
+    } else if (answer.finalText) {
+      finalText.value = answer.finalText;
+      finalImage.value = answer.finalImage; // Set the final image if available
+      currentQuestion.value = null;
     } else {
-      // Assuming reaching here means we're at the end of the quiz without a specified `final_text`
       finalText.value = "Thank you for completing the quiz!";
+      finalImage.value = null;
       currentQuestion.value = null;
     }
   };
@@ -82,6 +81,12 @@
   
   
   <style scoped>
+  .final-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 20px; /* Adjust spacing as needed */
+}
   .button {
     padding: 10px 20px;
     background-color: #fff;
