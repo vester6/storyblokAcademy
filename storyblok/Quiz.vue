@@ -25,6 +25,7 @@
     </div>
   </template>
   
+  
   <script setup>
   import { ref, onMounted, defineProps } from 'vue';
   defineProps({ blok: Object });
@@ -57,20 +58,25 @@
   };
   
   const selectAnswer = (answer) => {
-    if (answer.next_question && answer.next_question.length > 0) {
-      currentQuestion.value = answer.next_question[0];
-      finalText.value = null;
-      finalImage.value = null; // Clear the image when moving to the next question
-    } else if (answer.finalText) {
+  // First, check if there are any follow-up questions
+  if (answer.next_question && answer.next_question.length > 0) {
+    currentQuestion.value = answer.next_question[0];
+    finalText.value = null;  // Clear any final text
+    finalImage.value = null; // Clear the final image
+  } else {
+    // If there are no follow-up questions, check for finalText
+    if (answer.finalText) {
       finalText.value = answer.finalText;
-      finalImage.value = answer.finalImage; // Set the final image if available
-      currentQuestion.value = null;
+      finalImage.value = answer.finalImage ? answer.finalImage.filename : null;
     } else {
+      // If there is no finalText, provide a default completion message
       finalText.value = "Thank you for completing the quiz!";
-      finalImage.value = null;
-      currentQuestion.value = null;
+      finalImage.value = null; // Ensure no image is displayed for the default message
     }
-  };
+    currentQuestion.value = null; // Clear current question since we are at the end
+  }
+};
+
   
   const restartQuiz = () => {
     fetchQuizData(); // Resets the quiz to the first question
