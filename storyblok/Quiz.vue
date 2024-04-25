@@ -183,10 +183,5 @@ h3 {
 
 .question-image {
   max-width: 100%;
-  height: 150px;
-}
-
-.imagecontainer {
-  min-height: 150px;
 }
 </style>
