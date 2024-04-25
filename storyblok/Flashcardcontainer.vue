@@ -19,6 +19,9 @@ defineProps({ blok: Object });
 </script>
 
 <style scoped>
+h3 {
+  padding-bottom: 30px;
+}
 p {
   font-size: 16px;
   line-height: 24px;
@@ -59,7 +62,7 @@ p {
 }
 
 .wrapper {
- height: 400px;
+  height: 400px;
   background-color: #f9fdff;
 }
 </style>

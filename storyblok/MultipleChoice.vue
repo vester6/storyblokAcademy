@@ -2,12 +2,12 @@
   <div class="quiz-container">
     <form>
       <div class="quiz-header">
-        <h3>{{ blok.headline }}</h3>
         <img
           :src="blok.image.filename"
           :alt="blok.image.alt"
           class="teaser-image"
         />
+        <h3>{{ blok.headline }}</h3>
       </div>
       <p>{{ blok.bodytext }}</p>
       <div v-for="(option, index) in blok.options" :key="index" class="option">
@@ -124,6 +124,7 @@ p {
 
 h3 {
   padding-bottom: 15px;
+  padding-top: 15px;
 }
 
 img {
