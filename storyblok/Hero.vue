@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({ blok: Object });
 
 const heroClasses = computed(() => {

@@ -1,15 +1,15 @@
 <template>
-  <div v-editable="blok" class="column-grid">
-    <div class="column-grid__top-section">
-      <h3 class="column-grid__headline">{{ blok.headline }}</h3>
-      <p class="column-grid__bodytext">{{ blok.bodytext }}</p>
+  <div v-editable="blok" class="flashcard-container">
+    <div class="flashcard-container__top-section">
+      <h3 class="flashcard-container__headline">{{ blok.headline }}</h3>
+      <p class="flashcard-container__bodytext">{{ blok.bodytext }}</p>
     </div>
-    <div class="column-grid__teaser-list">
+    <div class="flashcard-container__teaser-list">
       <StoryblokComponent
         v-for="blok in blok.columns"
         :key="blok._uid"
         :blok="blok"
-        class="column-grid__storyblok-component"
+        class="flashcard-container__storyblok-component"
       />
     </div>
   </div>
@@ -20,11 +20,12 @@ defineProps({ blok: Object });
 </script>
 
 <style scoped>
-.column-grid {
+.flashcard-container {
+  height: 400px;
   background-color: #f9fdff;
 }
 
-.column-grid__top-section {
+.flashcard-container__top-section {
   display: grid;
   margin: 0 auto;
   padding-left: 30px;
@@ -32,11 +33,11 @@ defineProps({ blok: Object });
   padding-top: 30px;
 }
 
-.column-grid__headline {
+.flashcard-container__headline {
   padding-bottom: 30px;
 }
 
-.column-grid__bodytext {
+.flashcard-container__bodytext {
   font-size: 16px;
   line-height: 24px;
   font-family: "Open Sans";
@@ -44,7 +45,7 @@ defineProps({ blok: Object });
   font-weight: 300;
 }
 
-.column-grid__teaser-list {
+.flashcard-container__teaser-list {
   display: grid;
   grid-gap: 20px;
   margin: 0 auto;
@@ -53,13 +54,13 @@ defineProps({ blok: Object });
 }
 
 @media (max-width: 768px) {
-  .column-grid__teaser-list {
+  .flashcard-container__teaser-list {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
-  .column-grid__teaser-list {
+  .flashcard-container__teaser-list {
     grid-template-columns: repeat(1, 1fr);
   }
 }

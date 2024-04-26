@@ -1,25 +1,26 @@
 <template>
   <div v-editable="accordion" class="accordion">
-    <div class="accordion-header" @click="toggleAccordion">
-      <h3>{{ accordion.headline }}</h3>
-      <span class="accordion-icon">{{ isExpanded ? "-" : "+" }}</span>
+    <div class="accordion__header" @click="toggleAccordion">
+      <h3 class="accordion__headline">{{ accordion.headline }}</h3>
+      <span class="accordion__icon">{{ isExpanded ? "-" : "+" }}</span>
     </div>
     <div
-      class="accordion-content"
+      class="accordion__content"
       :style="{ display: isExpanded ? 'block' : 'none' }"
     >
       <img
         v-if="accordion.image"
         :src="accordion.image.filename"
         :alt="accordion.image.alt"
+        class="accordion__image"
       />
 
-      <div v-html="bodytextnewcontent"></div>
+      <div class="accordion__bodytext" v-html="bodytextnewcontent"></div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 const props = defineProps({ accordion: Object });
 const bodytextnewcontent = computed(() =>
@@ -43,7 +44,7 @@ const toggleAccordion = () => {
   border-bottom: none;
 }
 
-.accordion-header {
+.accordion__header {
   padding: 30px 30px;
   cursor: pointer;
   display: flex;
@@ -52,34 +53,34 @@ const toggleAccordion = () => {
   transition: background-color 1s ease;
 }
 
-.accordion-header:hover {
+.accordion__header:hover {
   background-color: #e2f5fc;
 }
 
-.accordion-icon {
+.accordion__icon {
   font-size: 24px;
-  line-height: 0; /* Adjusts line height to match the icon size */
+  line-height: 0;
 }
 
-.accordion-content {
+.accordion__content {
   padding: 20px;
   background-color: white;
   transition: all 1s ease-in-out;
 }
 
-.accordion-content img {
+.accordion__image {
   max-width: 100%;
   height: auto;
   margin-bottom: 15px;
 }
 
-.accordion-content p {
+.accordion__bodytext {
   margin: 0;
   font-size: 16px;
   line-height: 1.5;
 }
 
-p {
+.accordion__bodytext {
   font-size: 16px;
   line-height: 24px;
   font-family: "Open Sans";

@@ -1,26 +1,23 @@
 <template>
-  <div v-editable="blok" class="container">
-    <div class="content">
-      <img :src="blok.icon.filename" :alt="blok.icon.alt" class="icon" />
-      <p class="text">{{ blok.text }}</p>
+  <div v-editable="blok" class="notice">
+    <div class="notice__content">
+      <img
+        :src="blok.icon.filename"
+        :alt="blok.icon.alt"
+        class="notice__icon"
+      />
+      <p class="notice__text">{{ blok.text }}</p>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps } from "vue";
 defineProps({ blok: Object });
 </script>
 
 <style scoped>
-p {
-  font-size: 16px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
-}
-.container {
+.notice {
   background-color: #effafe;
   color: #0c0931;
   display: flex;
@@ -32,40 +29,43 @@ p {
   max-width: 646px;
   margin: auto;
   padding: 30px;
-  /* Take full viewport height */
 }
 
 @media (max-width: 991px) {
-  .container {
+  .notice {
     padding: 20px 20px;
   }
 }
 
-.content {
+.notice__content {
   display: flex;
   gap: 15px;
-  align-items: center; /* Align items vertically */
+  align-items: center;
 }
 
 @media (max-width: 991px) {
-  .content {
+  .notice__content {
     flex-direction: column;
   }
 }
 
-.icon {
+.notice__icon {
   align-self: start;
   object-fit: contain;
   width: 21px;
-  height: 21px; /* Match the width if aspect ratio is to be maintained */
+  height: 21px;
 }
 
-.text {
+.notice__text {
   font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0c0931;
+  font-weight: 300;
 }
 
 @media (max-width: 991px) {
-  .text {
+  .notice__text {
     max-width: 100%;
   }
 }

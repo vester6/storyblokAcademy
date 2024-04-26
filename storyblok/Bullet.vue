@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 const props = defineProps({ bullet: Object });
 const bulletcontent = computed(() => renderRichText(props.bullet.bullettext));
@@ -26,21 +26,20 @@ const bulletcontent = computed(() => renderRichText(props.bullet.bullettext));
 }
 
 .number {
-  /* Center the number both vertically and horizontally */
   display: flex;
   align-items: center;
   font-family: "Open Sans";
   font-weight: 500;
   justify-content: center;
   margin: 0;
-  height: 100%; /* Ensure the number takes up the full height of the circle */
+  height: 100%;
 }
 
 .circle {
-  width: 30px; /* You can adjust this value as needed */
-  height: 30px; /* Same value as width to maintain a perfect circle */
-  min-width: 30px; /* Ensure a minimum width */
-  min-height: 30px; /* Ensure a minimum height */
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
   border-radius: 50%;
   background-color: #e2f5fc;
   margin-right: 15px;

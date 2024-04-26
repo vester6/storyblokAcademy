@@ -1,41 +1,41 @@
 <template>
-  <main class="main-container">
-    <div class="content-wrapper">
-      <h3 class="title">
+  <main class="sorting-activity">
+    <div class="sorting-activity__content-wrapper">
+      <h3 class="sorting-activity__title">
         Do you remember what's included in a site file? Drag and drop the cards
         into the correct boxes.
       </h3>
-      <div class="card-container">
+      <div class="sorting-activity__card-container">
         <div
-  v-if="!cardPosition.animation"
-  class="card"
-  :style="cardStyle"
-  @mousedown="startDrag"
-  @mousemove="onDrag"
-  @mouseup="endDrag"
-  @mouseleave="endDrag"
->
-  <p class="card-title">Draggable card</p>
-  <svg
-    class="card-icon"
-    width="31"
-    height="11"
-    viewBox="0 0 31 11"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M0.5 0.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-    <path d="M0.5 5.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-    <path d="M0.5 10.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
-  </svg>
-</div>
+          v-if="!cardPosition.animation"
+          class="sorting-activity__card"
+          :style="cardStyle"
+          @mousedown="startDrag"
+          @mousemove="onDrag"
+          @mouseup="endDrag"
+          @mouseleave="endDrag"
+        >
+          <p class="sorting-activity__card-title">Draggable card</p>
+          <svg
+            class="sorting-activity__card-icon"
+            width="31"
+            height="11"
+            viewBox="0 0 31 11"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0.5 0.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+            <path d="M0.5 5.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+            <path d="M0.5 10.5H30.5" stroke="#CED4DA" stroke-linecap="round" />
+          </svg>
+        </div>
 
-        <div class="dropzone-container">
-          <div class="dropzone" ref="dropzone1">
-            <p class="dropzone-title">dropzone 1</p>
+        <div class="sorting-activity__dropzone-container">
+          <div class="sorting-activity__dropzone" ref="dropzone1">
+            <p class="sorting-activity__dropzone-title">dropzone 1</p>
           </div>
-          <div class="dropzone" ref="dropzone2">
-            <p class="dropzone-title">dropzone 2</p>
+          <div class="sorting-activity__dropzone" ref="dropzone2">
+            <p class="sorting-activity__dropzone-title">dropzone 2</p>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
 const isDragging = ref(false);
@@ -90,7 +90,9 @@ const endDrag = () => {
 
 function isOverDropZone(dropzone) {
   if (!dropzone) return false;
-  const cardRect = document.querySelector(".card").getBoundingClientRect();
+  const cardRect = document
+    .querySelector(".sorting-activity__card")
+    .getBoundingClientRect();
   const dzRect = dropzone.getBoundingClientRect();
 
   return (
@@ -103,7 +105,9 @@ function isOverDropZone(dropzone) {
 
 function applyRightAnswerAnimation() {
   const dropzoneRect = dropzone1.value.getBoundingClientRect();
-  const cardRect = document.querySelector(".card").getBoundingClientRect();
+  const cardRect = document
+    .querySelector(".sorting-activity__card")
+    .getBoundingClientRect();
   const offsetX = dropzoneRect.left - cardRect.left;
   const offsetY = dropzoneRect.top - cardRect.top;
   cardPosition.value = { x: offsetX, y: offsetY };
@@ -120,14 +124,18 @@ function applyRightAnswerAnimation() {
 }
 
 const cardStyle = computed(() => ({
-  transform: `translate(${cardPosition.value.x}px, ${cardPosition.value.y}px) rotate(${cardRotation.value}deg) scale(${isDragging.value ? 1.01 : 1})`,
+  transform: `translate(${cardPosition.value.x}px, ${
+    cardPosition.value.y
+  }px) rotate(${cardRotation.value}deg) scale(${isDragging.value ? 1.01 : 1})`,
   transition: isDragging.value ? "none" : "transform 0.6s ease",
   cursor: isDragging.value ? "grabbing" : "grab",
-  animation: isOverDropZone(dropzone2.value) ? 'fade-out-and-disappear 0.6s forwards' : (cardPosition.value.animation ? 'scale-down-and-disappear 0.6s forwards' : 'none')
+  animation: isOverDropZone(dropzone2.value)
+    ? "fade-out-and-disappear 0.6s forwards"
+    : cardPosition.value.animation
+    ? "scale-down-and-disappear 0.6s forwards"
+    : "none",
 }));
-
 </script>
-
 
 <style scoped>
 @keyframes fade-out-and-disappear {
@@ -142,16 +150,7 @@ const cardStyle = computed(() => ({
   }
 }
 
-
-p {
-  font-size: 16px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
-}
-
-.main-container {
+.sorting-activity {
   align-items: center;
   background-color: #f9fdff;
   display: flex;
@@ -159,20 +158,20 @@ p {
   padding: 60px;
 }
 
-.content-wrapper {
+.sorting-activity__content-wrapper {
   display: flex;
   width: 100%;
   max-width: 965px;
   flex-direction: column;
 }
 
-.title {
+.sorting-activity__title {
   color: #0c0931;
   font: 300 22px/27px Oscine, sans-serif;
   font-feature-settings: "clig" off, "liga" off;
 }
 
-.card-container {
+.sorting-activity__card-container {
   align-items: center;
   display: flex;
   margin-top: 150px;
@@ -181,8 +180,8 @@ p {
   flex-direction: column;
 }
 
-.card {
-  position: absolute; /* Updated for free movement */
+.sorting-activity__card {
+  position: absolute;
   box-shadow: 0px 0px 15px 0px rgba(32, 132, 201, 0.5);
   background-color: #fff;
   display: flex;
@@ -195,21 +194,20 @@ p {
   line-height: 27px;
   padding: 21px 31px;
   transition: 3s ease;
-  cursor: grab; /* Cursor 
-  updated dynamically */
+  cursor: grab;
 }
-.card:hover {
+.sorting-activity__card:hover {
   box-shadow: 0px 0px 15px 0px rgba(32, 132, 201, 1);
 }
 
-.card-icon {
+.sorting-activity__card-icon {
   aspect-ratio: 3.03;
   width: 30px;
   align-self: center;
   margin-top: 57px;
 }
 
-.dropzone-container {
+.sorting-activity__dropzone-container {
   justify-content: center;
   margin-top: 60px;
   display: flex;
@@ -217,7 +215,7 @@ p {
   width: 100%;
 }
 
-.dropzone {
+.sorting-activity__dropzone {
   display: flex;
   justify-content: center;
   box-shadow: 0px 0px 15px 0px rgba(32, 132, 201, 0.5);

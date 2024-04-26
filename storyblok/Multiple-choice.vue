@@ -1,20 +1,24 @@
 <template>
-  <div class="quiz-container">
+  <div class="quiz">
     <form>
-      <div class="quiz-header">
+      <div class="quiz__header">
         <img
           :src="blok.image.filename"
           :alt="blok.image.alt"
-          class="teaser-image"
+          class="quiz__image"
         />
-        <h3>{{ blok.headline }}</h3>
+        <h3 class="quiz__headline">{{ blok.headline }}</h3>
       </div>
-      <p>{{ blok.bodytext }}</p>
-      <div v-for="(option, index) in blok.options" :key="index" class="option">
+      <p class="quiz__bodytext">{{ blok.bodytext }}</p>
+      <div
+        v-for="(option, index) in blok.options"
+        :key="index"
+        class="quiz__option"
+      >
         <label
           :class="{
-            selected: selectedOption === index.toString(),
-            'option-label': true,
+            'quiz__option--selected': selectedOption === index.toString(),
+            'quiz__option-label': true,
           }"
           @click="selectOption(index)"
         >
@@ -25,6 +29,7 @@
             :value="index"
             v-model="selectedOption"
             :disabled="submitted"
+            class="quiz__input"
           />
           {{ option.text }}
         </label>
@@ -34,8 +39,8 @@
           v-if="submitted"
           :class="
             blok.options[selectedOption].isCorrect
-              ? 'correct-answer'
-              : 'incorrect-answer'
+              ? 'quiz__feedback--correct'
+              : 'quiz__feedback--incorrect'
           "
         >
           <img
@@ -44,12 +49,12 @@
                 ? '/icon-correct.svg'
                 : '/icon-wrong.svg'
             "
-            class="icon"
+            class="quiz__icon"
             alt="Feedback Icon"
           />
 
-          <div class="header">
-            <h3 class="text">
+          <div class="quiz__header">
+            <h3 class="quiz__text">
               {{
                 blok.options[selectedOption].isCorrect
                   ? blok.headlinecorrect
@@ -57,7 +62,7 @@
               }}
             </h3>
           </div>
-          <p class="message">
+          <p class="quiz__message">
             {{
               blok.options[selectedOption].isCorrect
                 ? blok.textcorrect
@@ -65,11 +70,11 @@
             }}
           </p>
 
-          <div class="submit-container">
+          <div class="quiz__submit-container">
             <input
               type="button"
               value="Try Again"
-              class="submit-button"
+              class="quiz__submit-button"
               @click="resetQuiz"
             />
           </div>
@@ -79,7 +84,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps, ref, watch } from "vue";
 defineProps({ blok: Object });
 let selectedOption = ref(null);
@@ -114,70 +119,8 @@ const resetQuiz = () => {
 .fade-leave-to {
   opacity: 0;
 }
-p {
-  font-size: 16px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
-}
 
-h3 {
-  padding-bottom: 15px;
-  padding-top: 15px;
-}
-
-img {
-  width: 100%;
-}
-p,
-label {
-  font-size: 16px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
-  margin-bottom: 15px;
-  margin-top: 15px;
-}
-
-.submit-button {
-  padding: 10px 20px;
-  background-color: #2084c9;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.option {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.option-label {
-  display: block;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.option-label:hover {
-  background-color: #effafe;
-}
-
-.selected {
-  border: 3px solid #2084c9;
-}
-
-.option-label.selected {
-  border: 3px solid #2084c9; /* Change the color as per your requirement */
-  box-sizing: border-box;
-}
-
-/*  .option-label input[type="radio"] {position: absolute;
-  opacity: 0; }If you want the radio button to be hidden but still clickable */
-
-.quiz-container {
+.quiz {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,25 +130,59 @@ label {
   width: 100%;
 }
 
-.question-image {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
+.quiz__header {
+  padding-bottom: 15px;
+  padding-top: 15px;
 }
 
-form {
+.quiz__image {
+  width: 100%;
+}
+
+.quiz__headline,
+.quiz__bodytext,
+.quiz__option-label {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: #0c0931;
+  font-weight: 300;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.quiz__option {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.quiz__option-label {
+  display: block;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.quiz__option-label:hover {
+  background-color: #effafe;
+}
+
+.quiz__option--selected {
+  border: 3px solid #2084c9;
+}
+
+.quiz__option-label.quiz__option--selected {
+  border: 3px solid #2084c9;
+  box-sizing: border-box;
+}
+
+.quiz__form {
   background-color: #fff;
   padding: 20px;
   width: 100%;
   max-width: 646px;
 }
 
-label {
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-input[type="submit"] {
+.quiz__submit-button {
   padding: 10px 20px;
   background-color: #2084c9;
   color: white;
@@ -214,13 +191,14 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-.submit-container {
+.quiz__submit-container {
   display: flex;
-  justify-content: center; /* Centers the button horizontally */
+  justify-content: center;
   margin-top: 20px;
 }
-.correct-answer,
-.incorrect-answer {
+
+.quiz__feedback--correct,
+.quiz__feedback--incorrect {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -232,11 +210,10 @@ input[type="submit"] {
   text-align: center;
 }
 
-.correct-answer .header,
-.incorrect-answer .header {
+.quiz__feedback--correct .quiz__header,
+.quiz__feedback--incorrect .quiz__header {
   display: flex;
   justify-content: center;
-
   width: 100%;
   max-width: 475px;
   font-size: 30px;
@@ -245,8 +222,8 @@ input[type="submit"] {
   font-weight: 300;
 }
 
-.correct-answer .icon,
-.incorrect-answer .icon {
+.quiz__feedback--correct .quiz__icon,
+.quiz__feedback--incorrect .quiz__icon {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -254,22 +231,21 @@ input[type="submit"] {
   max-width: 100%;
 }
 
-.icon {
+.quiz__icon {
   width: 45px;
   height: 45px;
-
   object-fit: auto;
   object-position: center;
 }
 
-.correct-answer .text,
-.incorrect-answer .text {
+.quiz__feedback--correct .quiz__text,
+.quiz__feedback--incorrect .quiz__text {
   margin-top: 31px;
   font-family: Oscine Trial, sans-serif;
 }
 
-.correct-answer .message,
-.incorrect-answer .message {
+.quiz__feedback--correct .quiz__message,
+.quiz__feedback--incorrect .quiz__message {
   color: #0c0931;
   margin-top: 0px;
   font: 16px/24px Open Sans, sans-serif;
@@ -278,14 +254,14 @@ input[type="submit"] {
 }
 
 @media (max-width: 991px) {
-  .correct-answer .message,
-  .incorrect-answer .message {
+  .quiz__feedback--correct .quiz__message,
+  .quiz__feedback--incorrect .quiz__message {
     max-width: 100%;
   }
 }
 
-.correct-answer .try-again-button,
-.incorrect-answer .try-again-button {
+.quiz__feedback--correct .quiz__try-again-button,
+.quiz__feedback--incorrect .quiz__try-again-button {
   margin-top: 30px;
   padding: 2px 0;
   border-radius: 6px;

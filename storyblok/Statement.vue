@@ -1,21 +1,19 @@
 <template>
-  <div class="container">
-    <div v-html="richtextcontent" class="richtextstyle"></div>
-  </div>
+  <section v-editable="blok" class="statement">
+    <div v-html="richtextcontent" class="statement__content"></div>
+  </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, computed } from "vue";
 const props = defineProps({ blok: Object });
-
-// Function `renderRichText` should be defined or imported if it processes richtext content
 const richtextcontent = computed(() =>
   renderRichText(props.blok.richtextstatement)
 );
 </script>
 
 <style scoped>
-.container {
+.statement {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +29,7 @@ const richtextcontent = computed(() =>
 }
 
 @media (max-width: 991px) {
-  .container {
+  .statement {
     max-width: 100%;
     padding: 30 20px;
   }

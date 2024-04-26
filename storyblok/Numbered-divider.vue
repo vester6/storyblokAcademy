@@ -1,44 +1,28 @@
 <template>
-  <div class="centered-container">
-    <div v-editable="blok" class="container">
-      <div class="circle">
-        <p class="number">{{ blok.number }}</p>
+  <div class="numbered-divider">
+    <div v-editable="blok" class="numbered-divider__container">
+      <div class="numbered-divider__circle">
+        <p class="numbered-divider__number">{{ blok.number }}</p>
       </div>
-      <div class="divider"></div>
+      <div class="numbered-divider__divider"></div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps } from "vue";
 defineProps({ blok: Object });
 </script>
 
 <style scoped>
-p {
-  font-size: 16px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
-}
-.centered-container {
+.numbered-divider {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: 10vh; /* Full viewport height */
 }
-.number {
-  /* Center the number both vertically and horizontally */
-  display: flex;
-  align-items: center;
-  font-family: "Open Sans";
-  font-weight: 500;
-  justify-content: center;
-  margin: 0; /* Reset margin to remove any default spacing */
-  height: 100%; /* Ensure the number takes up the full height of the circle */
-}
-.container {
+
+.numbered-divider__container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -48,7 +32,7 @@ p {
   width: 100%; /* Ensure it takes the available space */
 }
 
-.circle {
+.numbered-divider__circle {
   position: absolute; /* Position it over the divider */
   top: 50%; /* Center vertically */
   transform: translateY(
@@ -61,7 +45,18 @@ p {
   z-index: 1; /* Ensures it sits above the divider */
 }
 
-.divider {
+.numbered-divider__number {
+  /* Center the number both vertically and horizontally */
+  display: flex;
+  align-items: center;
+  font-family: "Open Sans";
+  font-weight: 500;
+  justify-content: center;
+  margin: 0; /* Reset margin to remove any default spacing */
+  height: 100%; /* Ensure the number takes up the full height of the circle */
+}
+
+.numbered-divider__divider {
   position: absolute;
   width: 100%; /* Full width of the container */
   top: 50%; /* Align with the middle of the circle */
