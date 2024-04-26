@@ -21,13 +21,13 @@
         </ul>
       </div>
       <div v-else-if="finalText">
-        <p>{{ finalText }}</p>
         <img
           v-if="finalImage"
           :src="finalImage"
           alt="Ending Image"
           class="final-image"
         />
+        <p>{{ finalText }}</p>
         <button class="button" @click="restartQuiz">Restart Quiz</button>
       </div>
       <div v-else>
