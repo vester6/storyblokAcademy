@@ -7,7 +7,7 @@
           :alt="blok.image.alt"
           class="quiz__image"
         />
-        <h3 class="quiz__headline">{{ blok.headline }}</h3>
+        <h2 class="quiz__headline">{{ blok.headline }}</h2>
       </div>
       <p class="quiz__bodytext">{{ blok.bodytext }}</p>
       <div

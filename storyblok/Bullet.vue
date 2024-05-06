@@ -23,6 +23,7 @@ const bulletcontent = computed(() => renderRichText(props.bullet.bullettext));
 
 .bulletcontent {
   margin-top: 4px;
+  max-width: 654px;
 }
 
 .number {

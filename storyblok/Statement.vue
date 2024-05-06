@@ -28,6 +28,23 @@ const richtextcontent = computed(() =>
   padding: 60px;
 }
 
+.statement > * {
+  color: hsla(248, 61.8%, 11.37%, 0.4);
+
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-size: 50% 100%;
+  background-image: linear-gradient(90deg, #0C0931, #0C0931);
+  animation: scroll-reveal linear forwards;
+  animation-timeline: view();
+  animation-range-start: cover 0vh;
+  animation-range-end: cover 50vh;
+}
+
+@keyframes scroll-reveal{
+  to{background-size: 100% 100%;}
+}
+
 @media (max-width: 991px) {
   .statement {
     max-width: 100%;

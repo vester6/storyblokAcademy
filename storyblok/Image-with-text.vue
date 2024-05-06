@@ -1,6 +1,9 @@
 <template>
   <div v-editable="blok" class="image-with-text">
-    <div class="image-with-text__container" :class="layouts">
+    <div
+      class="image-with-text__container"
+      :class="{ 'reverse-layout': blok.reverse }"
+    >
       <div class="image-with-text__text-content">
         <header class="image-with-text__headline">{{ blok.headline }}</header>
         <div class="image-with-text__bodytext" v-html="bodytext"></div>
@@ -19,18 +22,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 const props = defineProps({ blok: Object });
 const bodytext = computed(() => renderRichText(props.blok.bodytext));
-
-const layouts = computed(() => {
-  return props.blok.layout === "constrained"
-    ? "image-with-text__container--constrained"
-    : "image-with-text__container--full";
-});
 </script>
 
 <style scoped>
+.image-with-text__container.reverse-layout .image-with-text__text-content {
+  order: 2; /* Text content comes second */
+}
+
+.image-with-text__container.reverse-layout .image-with-text__image-side {
+  order: 1; /* Image comes first */
+}
+
 .image-with-text {
   display: flex;
   flex-direction: column;
