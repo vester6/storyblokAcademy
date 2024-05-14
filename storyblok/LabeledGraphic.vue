@@ -6,7 +6,7 @@
       v-html="labeledgraphicbodytext"
     ></div>
 
-    <div class="image-container">
+    <div class="image-container" ref="imageContainer">
       <img
         :src="blok.image.filename"
         alt="Labeled Graphic"
@@ -41,7 +41,6 @@
       </div>
     </div>
 
-    <!-- Modal for smaller screens -->
     <div v-if="isModalActive && isMobile" class="modal">
       <div class="modal-content">
         <span class="close" @click="closePopup()">&times;</span>
@@ -56,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Popup for larger screens -->
     <div
       v-if="currentMarker && !isMobile"
       class="popup"
@@ -70,82 +68,74 @@
         alt="Marker Detail"
       />
       <h3>{{ currentMarker.popupText }}</h3>
-
       <div class="labeled-graphic__bodytext" v-html="popupbodytext"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps } from "vue";
+import { ref, computed, defineProps, onMounted } from "vue";
+
 const props = defineProps({
   blok: Object,
 });
+
 const labeledgraphicbodytext = computed(() =>
   renderRichText(props.blok.bodyText)
 );
-const popupbodytext = computed(() => {
-  if (currentMarker.value && currentMarker.value.popupbodytext) {
-    return renderRichText(currentMarker.value.popupbodytext);
-  }
-  return "";
-});
+const popupbodytext = computed(() =>
+  currentMarker.value && currentMarker.value.popupbodytext
+    ? renderRichText(currentMarker.value.popupbodytext)
+    : ""
+);
 
 const currentMarker = ref(null);
 const popupStyle = ref({});
 const isModalActive = ref(false);
+const imageContainer = ref(null); // ref for the image container
 
-// Compute random animation delays for each marker
 onMounted(() => {
   props.blok.markers.forEach((marker) => {
-    // Assign a random delay from 0 to the duration of the animation cycle (2 seconds here)
-    marker.animationDelay = Math.random() * 2; // Random delay between 0 and 2 seconds
+    marker.animationDelay = Math.random() * 5; // Random delay between 0 and 5 seconds
   });
 });
 
-const isMobile = computed(() => {
-  return window.innerWidth < 768; // Adjust threshold as needed
-});
+const isMobile = computed(() => window.innerWidth < 768);
 
 function showPopup(marker, event) {
   currentMarker.value = marker;
-  isModalActive.value = true; // Activate modal on marker click if on mobile
-  const imageContainer = document.querySelector(".image-container");
+  isModalActive.value = true;
+  const container = imageContainer.value;
 
-  if (!imageContainer) return;
+  if (!container) return;
 
-  const containerTop = imageContainer.offsetTop;
-  const containerLeft = imageContainer.offsetLeft;
+  const rect = container.getBoundingClientRect();
+  const scrollY = window.scrollY; // Get the vertical scroll position
 
-  const markerPosX = (marker.x / 100) * imageContainer.offsetWidth;
-  const markerPosY = (marker.y / 200) * imageContainer.offsetHeight;
+  // Calculating positions based on percentage positions of the marker within the image container
+  const markerPosX = (marker.x / 100) * rect.width;
+  const markerPosY = (marker.y / 100) * rect.height;
 
-  // Determine which side of the marker the popup should appear on
-  const shouldDisplayLeft = marker.x >= 50; // Popups for markers on the right side appear to the left
+  const shouldDisplayLeft = marker.x >= 50;
 
   popupStyle.value = {
-    top: markerPosY + containerTop + "px",
-    left: shouldDisplayLeft ? markerPosX + containerLeft - 370 + "px" : "auto", // Position left if marker is on the right
+    // Using `rect.top` with `scrollY` for accurate positioning regardless of scroll
+    top: `${rect.top + scrollY + markerPosY - 60}px`,
+    left: shouldDisplayLeft ? "auto" : `${rect.left + markerPosX + 40}px`,
     right: shouldDisplayLeft
-      ? "auto"
-      : document.documentElement.clientWidth -
-        markerPosX -
-        containerLeft -
-        400 +
-        "px", // Position right if marker is on the left
+      ? `${window.innerWidth - (rect.left + markerPosX)}px`
+      : "auto",
     visibility: "visible",
     opacity: 1,
   };
 }
 
 function closePopup() {
-  if (currentMarker.value) {
-    popupStyle.value = { ...popupStyle.value, opacity: 0 };
+  popupStyle.value = { ...popupStyle.value, opacity: 0 };
+  setTimeout(() => {
+    currentMarker.value = null;
     isModalActive.value = false;
-    setTimeout(() => {
-      currentMarker.value = null;
-    }, 300);
-  }
+  }, 300);
 }
 </script>
 
@@ -154,7 +144,8 @@ function closePopup() {
   padding-bottom: 30px;
 }
 .labeled-graphic__bodytext {
-  padding-bottom: 30px;
+  padding-bottom: 15px;
+  padding-top: 10px;
   font-family: "Open Sans";
   font-size: 16px;
   line-height: 22px;
@@ -221,8 +212,8 @@ function closePopup() {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: rgba(114, 199, 231, 0.85);
-  animation: pulse-animation 2s infinite;
+  background-color: rgba(114, 199, 231, 0.75);
+  animation: pulse-animation 8s infinite;
 }
 @keyframes pulse-animation {
   0% {
@@ -230,8 +221,13 @@ function closePopup() {
     opacity: 1;
   }
 
-  100% {
+  40% {
     transform: scale(3.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(5);
     opacity: 0;
   }
 }
