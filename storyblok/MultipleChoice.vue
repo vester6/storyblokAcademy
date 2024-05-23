@@ -52,6 +52,7 @@
             type="submit"
             value="Submit"
             class="quiz__submit-button"
+            :class="{ 'quiz__submit-button--enabled': hasSelectedOption }"
             :disabled="submitted"
           />
         </div>
@@ -80,7 +81,7 @@
             <input
               type="button"
               value="Try Again"
-              class="quiz__submit-button"
+              class="quiz__retry-button"
               @click="resetQuiz"
             />
           </div>
@@ -157,6 +158,14 @@ const isIncorrectOption = (index) => {
     submitted.value && !props.blok.options[index].isCorrect && isSelected(index)
   );
 };
+
+const hasSelectedOption = computed(() => {
+  if (props.blok.multipleresponse) {
+    return selectedOption.value.length > 0;
+  } else {
+    return selectedOption.value !== null;
+  }
+});
 
 const getFeedbackIcon = computed(() => {
   if (isCorrect.value) {
@@ -255,11 +264,11 @@ const getIcon = (index) => {
 }
 
 .quiz__option--correct .quiz__option-label {
-  background-color: #e2f5fc; /* background for correct answers */
+  background-color: #e2f5fc; /* Light green background for correct answers */
 }
 
 .quiz__option--incorrect .quiz__option-label {
-  background-color: #f9fdff; /* background for incorrect answers */
+  background-color: #f9fdff; /* Light red background for incorrect answers */
 }
 
 .quiz__option-label:hover {
@@ -297,19 +306,41 @@ const getIcon = (index) => {
   font-size: 16px;
   line-height: 24px;
   font-family: "Open Sans";
-  color: #0c0931;
-  font-weight: 300;
+  color: white !important;
+  font-weight: 600;
   text-align: center;
   padding: 10px 20px;
-  background-color: #2084c9;
-  color: white;
+  background-color: #adafaf; /* Grey background for default state */
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s; /* Smooth transitions for button */
 }
 
+.quiz__submit-button--enabled {
+  background-color: #2084c9; /* Blue background for enabled state */
+}
+
 .quiz__submit-button:hover {
+  background-color: #1868a3; /* Darker blue on hover */
+}
+
+.quiz__retry-button {
+  font-size: 16px;
+  line-height: 24px;
+  font-family: "Open Sans";
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 20px;
+  background-color: #2084c9;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transitions for button */
+}
+
+.quiz__retry-button:hover {
   background-color: #1868a3; /* Darker blue on hover */
 }
 
